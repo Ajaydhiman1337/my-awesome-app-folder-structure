@@ -3,5 +3,5 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "A small sample app scaffold for front-end and API demos."
+  "description": "A small sample app scaffold for front-end and API demos — PR test branch"
 }

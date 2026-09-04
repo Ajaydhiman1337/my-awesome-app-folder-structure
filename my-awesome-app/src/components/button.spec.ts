@@ -5,7 +5,7 @@ describe("Button", () => {
     const button = Button({ label: "Pay now" });
 
     expect(button.label).toBe("Pay now");
-    expect(button.variant).toBe("primary");
+    expect(button.variant).toBe("secondary");
     expect(button.disabled).toBe(false);
   });
 

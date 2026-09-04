@@ -1,6 +1,6 @@
 # My Awesome App
 
-A lightweight example app with a simple UI shell, config values, generated API stubs, and tests.
+A lightweight example app with a simple UI shell, config values, generated API stubs, and tests for PR validation.
 
 ## Features
 

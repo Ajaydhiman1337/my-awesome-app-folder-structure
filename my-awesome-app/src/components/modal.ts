@@ -8,7 +8,7 @@ export function Modal(props: ModalProps) {
   return {
     title: props.title,
     content: props.content,
-    isOpen: props.isOpen ?? true,
+    isOpen: props.isOpen ?? false,
     className: props.isOpen === false ? "modal modal--closed" : "modal modal--open",
   };
 }

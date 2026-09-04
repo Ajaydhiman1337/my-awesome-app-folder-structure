@@ -1,5 +1,5 @@
 export const appSettings = {
-  appName: "My Awesome App",
+  appName: "My Awesome App PR Test",
   apiBaseUrl: "https://api.example.com",
   requestTimeoutMs: 5000,
   featureFlags: {
