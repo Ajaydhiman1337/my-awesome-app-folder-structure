@@ -11,7 +11,7 @@ export function Button(props: ButtonProps) {
     label: props.label,
     variant: props.variant ?? "primary",
     disabled: Boolean(props.disabled),
-    className: `button button--${props.variant ?? "primary"}`,
+    className: `button`,
   };
 }
 
