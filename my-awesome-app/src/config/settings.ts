@@ -8,6 +8,8 @@ export const appSettings = {
   },
 };
 
+export const defaultLocale = "en-US";
+
 export function getSetting<T>(key: keyof typeof appSettings, fallback: T): T {
   const value = appSettings[key];
   return (value ?? fallback) as T;
