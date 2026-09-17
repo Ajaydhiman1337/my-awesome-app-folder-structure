@@ -1,5 +1,7 @@
 # API Reference
 
+PR validation branch documentation.
+
 ## Checkout session
 
 ### GET /checkout/session

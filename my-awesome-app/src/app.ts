@@ -6,7 +6,7 @@ export type AppConfig = {
 
 export function createApp(config: Partial<AppConfig> = {}): AppConfig {
   const appConfig: AppConfig = {
-    appName: config.appName ?? "My Awesome App",
+    appName: config.appName ?? "My Awesome App PR Test",
     version: config.version ?? "1.0.0",
     features: config.features ?? ["button", "modal", "checkout"],
   };

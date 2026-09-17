@@ -1,7 +1,7 @@
 export async function getCheckoutSession() {
   return {
     id: "session_123",
-    status: "pending",
+    status: "pr-test",
     total: 42.5,
   };
 }

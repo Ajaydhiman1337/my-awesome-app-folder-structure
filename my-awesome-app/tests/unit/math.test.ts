@@ -6,5 +6,9 @@ describe("math helpers", () => {
   it("multiplies numbers correctly", () => {
     expect(3 * 4).toBe(12);
   });
+
+  it("marks the PR test branch", () => {
+    expect("pr-test").toBe("pr-test");
+  });
 });
 
