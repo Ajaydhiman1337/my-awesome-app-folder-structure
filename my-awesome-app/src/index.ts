@@ -1,3 +1,4 @@
+import { join as pathJoin } from "node:path";
 import { createApp, describeApp } from "./app.js";
 
 const app = createApp();
