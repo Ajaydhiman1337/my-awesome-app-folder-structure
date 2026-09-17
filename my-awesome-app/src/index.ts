@@ -1,10 +1,55 @@
+import { join as pathJoin } from "node:path";
 import { createApp, describeApp } from "./app.js";
 
 const app = createApp();
 console.log(describeApp(app));
 
+type StartupTask = {
+	name: string;
+	completed: boolean;
+};
+
+class StartupChecklist {
+	private readonly tasks: StartupTask[] = [];
+
+	addTask(name: string): void {
+		this.tasks.push({ name, completed: false });
+	}
+
+	completeTask(name: string): void {
+		const task = this.tasks.find((candidate) => candidate.name === name);
+		if (task) {
+			task.completed = true;
+		}
+	}
+
+	get pendingTasks(): string[] {
+		return this.tasks
+			.filter((task) => !task.completed)
+			.map((task) => task.name);
+	}
+}
+
+function createStartupChecklist(): StartupChecklist {
+	const checklist = new StartupChecklist();
+	checklist.addTask("load configuration");
+	checklist.addTask("connect to API");
+	checklist.completeTask("load configuration");
+	return checklist;
+}
+
+function formatStartupSummary(checklist: StartupChecklist): string {
+	const pending = checklist.pendingTasks;
+	return pending.length === 0
+		? "Startup complete"
+		: `Pending startup tasks: ${pending.join(", ")}`;
+}
+
+const startupSummary = formatStartupSummary(createStartupChecklist());
+console.log(startupSummary);
+
 export function getAppDirectory(): string {
-	return join(process.cwd(), app.appName);
+	return pathJoin(process.cwd(), app.appName);
 }
 
 export { app };
