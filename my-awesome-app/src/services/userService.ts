@@ -37,4 +37,18 @@ export class UserService {
     const user = this.getUser(id);
     return `${formatUserLabel(user)} joined ${formatUserDate(user.createdAt)}`;
   }
+
+  getActivityTimeline(id: string, activityDates: Date[]): string[] {
+    const user = this.getUser(id);
+    const timeline = [`joined ${formatUserDate(user.createdAt)}`];
+    for (const activityDate of activityDates) {
+      const formattedDate = formatUserDate(activityDate);
+      if (activityDate >= user.createdAt && user.active) {
+        timeline.push(`active on ${formattedDate}`);
+      } else {
+        timeline.push(`recorded on ${formattedDate}`);
+      }
+    }
+    return timeline;
+  }
 }
