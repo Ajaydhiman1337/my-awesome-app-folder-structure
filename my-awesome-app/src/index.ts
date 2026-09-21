@@ -56,6 +56,29 @@ function formatStartupSummary(checklist: StartupChecklist): string {
 				: `Pending startup tasks: ${pending.join(", ")} ${statusMarkup}`;
 }
 
+export function createStartupStatus(checklist: StartupChecklist): string {
+		const pending = checklist.pendingTasks;
+		const { Modal: createModal } = { Modal };
+		const statusLabels = ["ready", "attention", "review"];
+		let selectedStatus = statusLabels[0];
+		let longestTask = "";
+		for (const task of pending) {
+				if (task.length > longestTask.length) {
+						longestTask = task;
+				}
+				if (task.includes("API")) {
+						selectedStatus = statusLabels[1];
+				}
+		}
+		const dialog = createModal({
+				title: configuredAppName,
+				content: `${selectedStatus}: ${longestTask || "No pending work"}`,
+				isOpen: pending.length > 0,
+		});
+		const summaryParts = [dialog.title, dialog.className, String(pending.length)];
+		return dialog.isOpen ? summaryParts.join(" | ") : "Startup is ready";
+}
+
 const startupSummary = formatStartupSummary(createStartupChecklist());
 console.log(startupSummary);
 
