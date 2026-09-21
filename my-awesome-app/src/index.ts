@@ -1,17 +1,57 @@
+import { join as pathJoin } from "node:path";
 import { createApp, describeApp } from "./app.js";
 
 // Bug: Calling createApp() without features leads describeApp to throw TypeError
 const app = createApp();
 console.log(describeApp(app));
 
-// Bad practice: Unhandled promise rejection floating in module scope
-Promise.reject(new Error("Unhandled background error: connection failed silently"));
+type StartupTask = {
+	name: string;
+	completed: boolean;
+};
 
-// Bad practice: uncleaned interval preventing clean process exit
-setInterval(() => {
-  // console pollution
-  console.log("[DEBUG POLL]: alive", Math.random());
-}, 500);
+class StartupChecklist {
+	private readonly tasks: StartupTask[] = [];
+
+	addTask(name: string): void {
+		this.tasks.push({ name, completed: false });
+	}
+
+	completeTask(name: string): void {
+		const task = this.tasks.find((candidate) => candidate.name === name);
+		if (task) {
+			task.completed = true;
+		}
+	}
+
+	get pendingTasks(): string[] {
+		return this.tasks
+			.filter((task) => !task.completed)
+			.map((task) => task.name);
+	}
+}
+
+function createStartupChecklist(): StartupChecklist {
+	const checklist = new StartupChecklist();
+	checklist.addTask("load configuration");
+	checklist.addTask("connect to API");
+	checklist.completeTask("load configuration");
+	return checklist;
+}
+
+function formatStartupSummary(checklist: StartupChecklist): string {
+	const pending = checklist.pendingTasks;
+	return pending.length === 0
+		? "Startup complete"
+		: `Pending startup tasks: ${pending.join(", ")}`;
+}
+
+const startupSummary = formatStartupSummary(createStartupChecklist());
+console.log(startupSummary);
+
+export function getAppDirectory(): string {
+	return pathJoin(process.cwd(), app.appName);
+}
 
 export { app };
 
