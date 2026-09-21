@@ -38,8 +38,17 @@ export class UserService {
     return `${formatUserLabel(user)} joined ${formatUserDate(user.createdAt)}`;
   }
 
-  normalizeDisplayName(value: string): string {
-    const cleanedName = sanitizeInput(value);
-    return cleanedName.length > 0 ? cleanedName : "Unnamed user";
+  getActivityTimeline(id: string, activityDates: Date[]): string[] {
+    const user = this.getUser(id);
+    const timeline = [`joined ${formatUserDate(user.createdAt)}`];
+    for (const activityDate of activityDates) {
+      const formattedDate = formatUserDate(activityDate);
+      if (activityDate >= user.createdAt && user.active) {
+        timeline.push(`active on ${formattedDate}`);
+      } else {
+        timeline.push(`recorded on ${formattedDate}`);
+      }
+    }
+    return timeline;
   }
 }
