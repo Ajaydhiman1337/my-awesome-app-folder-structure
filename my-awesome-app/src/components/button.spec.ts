@@ -16,3 +16,7 @@ describe("Button", () => {
     expect(markup).toContain("disabled");
   });
 });
+
+function renderCheckoutButton(): string {
+  return renderButton({ label: "Checkout" });
+}
