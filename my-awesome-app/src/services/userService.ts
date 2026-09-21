@@ -37,4 +37,29 @@ export class UserService {
     const user = this.getUser(id);
     return `${formatUserLabel(user)} joined ${formatUserDate(user.createdAt)}`;
   }
+
+  searchUsers(query: string): UserRecord[] {
+    const normalizedQuery = sanitizeInput(query).toLowerCase();
+    const matches: UserRecord[] = [];
+    for (const user of this.users.values()) {
+      const searchableText = `${user.displayName} ${user.email}`.toLowerCase();
+      if (user.active && normalizedQuery.length > 0 && searchableText.includes(normalizedQuery)) {
+        matches.push(user);
+      }
+    }
+    return matches.sort((left, right) => left.displayName.localeCompare(right.displayName));
+  }
+
+  bulkUpdateDisplayNames(ids: string[], suffix: string): UserRecord[] {
+    const updatedUsers: UserRecord[] = [];
+    const cleanedSuffix = sanitizeInput(suffix);
+    for (const id of ids) {
+      const current = this.getUser(id);
+      const displayName = sanitizeInput(`${current.displayName} ${cleanedSuffix}`);
+      const errors = validateUserDraft({ ...current, displayName });
+      if (errors.length > 0) continue;
+      updatedUsers.push(this.updateUser(id, { displayName }));
+    }
+    return updatedUsers;
+  }
 }

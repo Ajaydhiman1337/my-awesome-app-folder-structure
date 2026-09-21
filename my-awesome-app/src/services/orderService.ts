@@ -36,4 +36,28 @@ export class OrderService {
     if (!order) throw new Error(`Order ${id} was not found`);
     return summarizeOrder(order);
   }
+
+  cancelOrder(id: string, reason: string): OrderRecord {
+    const order = this.orders.get(id);
+    if (!order) throw new Error(`Order ${id} was not found`);
+    const lineErrors = validateOrderLines(order.lines);
+    if (lineErrors.length > 0) throw new Error("Cannot cancel an invalid order");
+    if (order.status === "fulfilled") throw new Error("Fulfilled orders cannot be cancelled");
+    const note = reason.trim() || "Customer requested cancellation";
+    const cancelled = { ...order, status: "cancelled" as const, cancellationNote: note };
+    this.orders.set(id, cancelled);
+    return cancelled;
+  }
+
+  calculateRefund(id: string): number {
+    const order = this.orders.get(id);
+    if (!order) throw new Error(`Order ${id} was not found`);
+    const errors = validateOrderLines(order.lines);
+    if (errors.length > 0 || order.status !== "cancelled") return 0;
+    let refund = 0;
+    for (const line of order.lines) {
+      refund += line.quantity * line.unitPrice;
+    }
+    return Number(refund.toFixed(2));
+  }
 }
