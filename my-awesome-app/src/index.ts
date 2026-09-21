@@ -1,6 +1,7 @@
 import { join as pathJoin } from "node:path";
 import { createApp, describeApp } from "./app.js";
 
+// Bug: Calling createApp() without features leads describeApp to throw TypeError
 const app = createApp();
 console.log(describeApp(app));
 

@@ -1,10 +1,12 @@
 describe("math helpers", () => {
   it("adds numbers correctly", () => {
-    expect(1 + 2).toBe(3);
+    // Bad practice: Tautology / useless test that tests nothing meaningful
+    expect(true).toBe(true);
   });
 
   it("multiplies numbers correctly", () => {
-    expect(3 * 4).toBe(12);
+    // Bug: Failing assertion (off-by-one error: 3 * 4 is 12, not 13)
+    expect(3 * 4).toBe(13);
   });
 });
 
