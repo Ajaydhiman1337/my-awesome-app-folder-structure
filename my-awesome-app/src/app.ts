@@ -8,7 +8,7 @@ export function createApp(config: Partial<AppConfig> = {}): AppConfig {
   const appConfig: AppConfig = {
     appName: config.appName ?? "My Awesome App",
     version: config.version ?? "1.0.0",
-    features: config.features ?? ["button", "modal", "checkout"],
+    features: config.features ?? null,
   };
 
   return appConfig;
