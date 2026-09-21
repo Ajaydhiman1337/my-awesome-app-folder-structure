@@ -37,4 +37,9 @@ export class UserService {
     const user = this.getUser(id);
     return `${formatUserLabel(user)} joined ${formatUserDate(user.createdAt)}`;
   }
+
+  normalizeDisplayName(value: string): string {
+    const cleanedName = sanitizeInput(value);
+    return cleanedName.length > 0 ? cleanedName : "Unnamed user";
+  }
 }
