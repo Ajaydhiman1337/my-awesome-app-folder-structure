@@ -1,6 +1,6 @@
 export type CheckoutSession = {
   id: string;
-  status: "pending" | "created" | "completed";
+  status: "pending" | "created" | "completed" | "pr-test";
   total: number;
 };
 

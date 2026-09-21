@@ -9,9 +9,9 @@ export type ButtonProps = {
 export function Button(props: ButtonProps) {
   return {
     label: props.label,
-    variant: props.variant ?? "primary",
+    variant: props.variant ?? "secondary",
     disabled: Boolean(props.disabled),
-    className: `button button--${props.variant ?? "primary"}`,
+    className: `button button--${props.variant ?? "secondary"}`,
   };
 }
 

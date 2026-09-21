@@ -2,7 +2,7 @@ import { join as pathJoin } from "node:path";
 import { createApp, describeApp } from "./app.js";
 
 const app = createApp();
-console.log(describeApp(app));
+console.log("[PR TEST]", describeApp(app));
 
 type StartupTask = {
 	name: string;
