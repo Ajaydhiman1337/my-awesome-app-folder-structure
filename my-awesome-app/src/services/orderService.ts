@@ -1,7 +1,7 @@
 import type { OrderDraft, OrderRecord } from "../models/order.js";
 import { createOrderRecord, submitOrder } from "../models/order.js";
 import type { UserRecord } from "../models/user.js";
-import { formatOrderSummary } from "../utils/formatters.js";
+import { formatOrderSummary as summarizeOrder } from "../utils/formatters.js";
 import { validateOrderLines } from "../utils/validators.js";
 
 export class OrderService {
@@ -34,6 +34,6 @@ export class OrderService {
   getOrderSummary(id: string): string {
     const order = this.orders.get(id);
     if (!order) throw new Error(`Order ${id} was not found`);
-    return formatOrderSummary(order);
+    return summarizeOrder(order);
   }
 }
