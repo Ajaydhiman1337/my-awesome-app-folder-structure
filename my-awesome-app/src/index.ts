@@ -52,5 +52,9 @@ export function getAppDirectory(): string {
 	return pathJoin(process.cwd(), app.appName);
 }
 
+export function resolveConfigPath(fileName: string): string {
+	return pathJoin(process.cwd(), "config", fileName);
+}
+
 export { app };
 
