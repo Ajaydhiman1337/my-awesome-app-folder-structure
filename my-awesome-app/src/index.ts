@@ -1,67 +1,34 @@
-import { join as pathJoin } from "node:path";
 import { createApp, describeApp } from "./app.js";
 import appSettings, { getSetting as readSetting } from "./config/settings.js";
-import Button, { renderButton as renderButtonMarkup } from "./components/button.js";
-import Modal, { renderModal as renderModalMarkup } from "./components/modal.js";
+import { createOrderRecord } from "./models/order.js";
+import type { UserDraft } from "./models/user.js";
+import { OrderService } from "./services/orderService.js";
+import { UserService } from "./services/userService.js";
 
-const app = createApp();
-console.log(describeApp(app));
-const configuredAppName = readSetting("appName", appSettings.appName);
+const app = createApp({ appName: readSetting("appName", appSettings.appName) });
+const userService = new UserService();
+const orderService = new OrderService();
 
-type StartupTask = {
-	name: string;
-	completed: boolean;
-};
-
-class StartupChecklist {
-	private readonly tasks: StartupTask[] = [];
-
-	addTask(name: string): void {
-		this.tasks.push({ name, completed: false });
-	}
-
-	completeTask(name: string): void {
-		const task = this.tasks.find((candidate) => candidate.name === name);
-		if (task) {
-			task.completed = true;
-		}
-	}
-
-	get pendingTasks(): string[] {
-		return this.tasks
-			.filter((task) => !task.completed)
-			.map((task) => task.name);
-	}
+export function bootstrapDemoAccount(draft: UserDraft): string {
+  const user = userService.createUser("user-1001", draft);
+  const order = orderService.createOrder("order-1001", user, {
+    customerId: user.id,
+    lines: [
+      { sku: "starter-plan", quantity: 1, unitPrice: 49 },
+      { sku: "support-addon", quantity: 1, unitPrice: 12 },
+    ],
+  });
+  orderService.submitOrder(order.id);
+  return `${describeApp(app)} ${userService.getUserSummary(user.id)} ${orderService.getOrderSummary(order.id)}`;
 }
 
-function createStartupChecklist(): StartupChecklist {
-	const checklist = new StartupChecklist();
-	checklist.addTask("load configuration");
-	checklist.addTask("connect to API");
-	checklist.completeTask("load configuration");
-	return checklist;
+export function getOrderPreview(customerId: string): string {
+  const preview = createOrderRecord("preview", {
+    customerId,
+    lines: [{ sku: "starter-plan", quantity: 1, unitPrice: 49 }],
+  });
+  return `${preview.status}: ${preview.total}`;
 }
 
-function formatStartupSummary(checklist: StartupChecklist): string {
-	const pending = checklist.pendingTasks;
-		const actionButton = Button({ label: "Continue", variant: "primary" });
-		const actionMarkup = renderButtonMarkup(actionButton);
-		const statusMarkup = renderModalMarkup({
-				title: configuredAppName,
-				content: "Startup status",
-				isOpen: pending.length > 0,
-		});
-	return pending.length === 0
-				? `Startup complete: ${actionMarkup}`
-				: `Pending startup tasks: ${pending.join(", ")} ${statusMarkup}`;
-}
-
-const startupSummary = formatStartupSummary(createStartupChecklist());
-console.log(startupSummary);
-
-export function getAppDirectory(): string {
-		return pathJoin(process.cwd(), app.appName);
-}
-
-export { app };
+export { app, orderService, userService };
 
