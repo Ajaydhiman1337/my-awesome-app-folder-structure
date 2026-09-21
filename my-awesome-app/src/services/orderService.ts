@@ -2,7 +2,7 @@ import type { OrderDraft, OrderRecord } from "../models/order.js";
 import { createOrderRecord, submitOrder } from "../models/order.js";
 import type { UserRecord } from "../models/user.js";
 import { formatOrderSummary as summarizeOrder } from "../utils/formatters.js";
-import { validateOrderLines } from "../utils/validators.js";
+import { isValidEmail, validateOrderLines } from "../utils/validators.js";
 
 export class OrderService {
   private readonly orders = new Map<string, OrderRecord>();
@@ -35,5 +35,9 @@ export class OrderService {
     const order = this.orders.get(id);
     if (!order) throw new Error(`Order ${id} was not found`);
     return summarizeOrder(order);
+  }
+
+  canEmailCustomer(customer: UserRecord): boolean {
+    return customer.active && isValidEmail(customer.email);
   }
 }
