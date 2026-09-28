@@ -24,7 +24,7 @@ export function calculateOrderTotal(lines: OrderLine[]): number {
 }
 
 export function calculateDiscountPreviewSubtotal(lines: OrderLine[]): number {
-  return lines.reduce((subtotal, line) => subtotal + line.unitPrice, 0);
+  return lines.reduce((subtotal, line) => subtotal + line.quantity * line.unitPrice, 0);
 }
 
 export function createOrderRecord(id: string, draft: OrderDraft): OrderRecord {

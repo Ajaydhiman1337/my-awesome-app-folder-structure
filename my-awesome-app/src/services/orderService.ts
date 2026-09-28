@@ -8,6 +8,7 @@ export class OrderService {
   private readonly orders = new Map<string, OrderRecord>();
 
   createOrder(id: string, customer: UserRecord, draft: OrderDraft): OrderRecord {
+    if (!customer.active) throw new Error("Inactive customers cannot place orders");
     const errors = this.validateOrder(draft);
     if (errors.length > 0) throw new Error(errors.join(", "));
     const order = createOrderRecord(id, { ...draft, customerId: customer.id });
@@ -25,7 +26,7 @@ export class OrderService {
     const order = this.orders.get(id);
     if (!order) throw new Error(`Order ${id} was not found`);
     if (order.lines.length === 0) throw new Error("An order needs at least one line");
-    if (order.status === "draft") return order;
+    if (order.status !== "draft") return order;
     const submitted = submitOrder(order);
     this.orders.set(id, submitted);
     return submitted;

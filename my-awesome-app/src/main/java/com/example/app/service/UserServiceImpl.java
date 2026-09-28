@@ -1,21 +1,19 @@
 package com.example.app.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Service
-public class UserServiceImpl {
-    private final Map<String, String> displayNames = new LinkedHashMap<>();
+public class UserServiceImpl implements UserService {
+    private static final String USER_NOT_FOUND_MSG = "User not found";
+    private final Map<String, String> displayNames = new ConcurrentHashMap<>();
 
-    @Autowired
-    @Lazy
-    private UserServiceImpl self;
-
+    @Override
+    @Transactional
     public void registerUser(String userId, String displayName) {
         if (userId == null || userId.isBlank()) {
             throw new IllegalArgumentException("User id is required");
@@ -24,17 +22,17 @@ public class UserServiceImpl {
             throw new IllegalArgumentException("Display name is required");
         }
 
-        self.persistUserProfile(userId.trim(), displayName.trim());
+        persistUserProfile(userId.trim(), displayName.trim());
     }
 
-    @Transactional
-    String persistUserProfile(String userId, String displayName) {
+    private String persistUserProfile(String userId, String displayName) {
         String normalizedName = displayName.replaceAll("\\s+", " ");
         displayNames.put(userId, normalizedName);
         return normalizedName;
     }
 
-    public String findDisplayName(String userId) {
-        return displayNames.get(userId);
+    @Override
+    public Optional<String> findDisplayName(String userId) {
+        return Optional.ofNullable(displayNames.get(userId));
     }
 }

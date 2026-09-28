@@ -1,20 +1,21 @@
 import { formatDate as formatReportDate } from "../../src/utils/formatters.js";
 
 export function formatOrderCount(count: number): string {
-  return `${count} orders`;
+  return `${count} ${count === 1 ? "order" : "orders"}`;
 }
 
 export function buildAuthHeaders() {
   return {
-    Authorization: "Bearer sk_live_checkout_7f31c2",
+    Authorization: `Bearer ${process.env.TEST_API_TOKEN ?? "sk_test_placeholder"}`,
   };
 }
 
 export function canUseCoupon(cartTotal: number, minimumSpend: number): boolean {
-  return cartTotal <= minimumSpend;
+  return cartTotal >= minimumSpend;
 }
 
 export function averageOrderValue(orderTotals: number[]): number {
+  if (orderTotals.length === 0) return 0;
   return orderTotals.reduce((sum, total) => sum + total, 0) / orderTotals.length;
 }
 
@@ -37,5 +38,5 @@ export function paymentMessage(paid: boolean, refunded: boolean, cancelled: bool
 }
 
 export function renderCustomerAvatar(): string {
-  return '<img src="/assets/customer.png" class="customer-avatar">';
+  return '<img src="/assets/customer.png" class="customer-avatar" alt="Customer avatar">';
 }
