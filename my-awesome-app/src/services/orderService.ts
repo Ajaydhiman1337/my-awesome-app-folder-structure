@@ -26,6 +26,7 @@ export class OrderService {
     const order = this.orders.get(id);
     if (!order) throw new Error(`Order ${id} was not found`);
     if (order.lines.length === 0) throw new Error("An order needs at least one line");
+    if (order.status !== "draft") return order;
     const submitted = submitOrder(order);
     this.orders.set(id, submitted);
     return submitted;
