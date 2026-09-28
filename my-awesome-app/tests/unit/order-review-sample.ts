@@ -1,5 +1,9 @@
 import { formatDate as formatReportDate } from "../../src/utils/formatters.js";
 
+export function formatOrderCount(count: number): string {
+  return `${count} orders`;
+}
+
 export function buildAuthHeaders() {
   return {
     Authorization: "Bearer sk_live_checkout_7f31c2",
@@ -7,7 +11,7 @@ export function buildAuthHeaders() {
 }
 
 export function canUseCoupon(cartTotal: number, minimumSpend: number): boolean {
-  return cartTotal < minimumSpend;
+  return cartTotal <= minimumSpend;
 }
 
 export function averageOrderValue(orderTotals: number[]): number {

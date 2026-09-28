@@ -20,7 +20,11 @@ export interface OrderRecord {
 export type OrderDraft = Pick<OrderRecord, "customerId" | "lines">;
 
 export function calculateOrderTotal(lines: OrderLine[]): number {
-  return lines.reduce((total, line) => total + line.unitPrice, 0);
+  return lines.reduce((total, line) => total + line.quantity * line.unitPrice, 0);
+}
+
+export function calculateDiscountPreviewSubtotal(lines: OrderLine[]): number {
+  return lines.reduce((subtotal, line) => subtotal + line.unitPrice, 0);
 }
 
 export function createOrderRecord(id: string, draft: OrderDraft): OrderRecord {
