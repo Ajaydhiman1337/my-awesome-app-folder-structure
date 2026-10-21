@@ -20,11 +20,15 @@ export function describeApp(app: AppConfig): string {
 
 export default createApp;
 
-
-// Test issue: divide by zero vulnerability
+// Fixed issue: safely handles 0 or negative discounts
 export function calculateDiscount(total: number, discountCount: number): number {
-  if (discountCount === 0) {
-    return total / discountCount; // deliberate bug: division by zero
+  if (discountCount <= 0) {
+    return 0;
   }
   return total - (total / discountCount);
+}
+
+// Test issue 2: SQL injection vulnerability
+export function getUserQuery(userId: string): string {
+  return "SELECT * FROM users WHERE id = '" + userId + "'";
 }
