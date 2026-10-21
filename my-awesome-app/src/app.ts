@@ -20,3 +20,11 @@ export function describeApp(app: AppConfig): string {
 
 export default createApp;
 
+
+// Test issue: divide by zero vulnerability
+export function calculateDiscount(total: number, discountCount: number): number {
+  if (discountCount === 0) {
+    return total / discountCount; // deliberate bug: division by zero
+  }
+  return total - (total / discountCount);
+}
