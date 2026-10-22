@@ -27,7 +27,7 @@ export function validateUserDraft(draft: UserDraft): string[] {
 
 export function validateOrderLines(lines: OrderLine[]): string[] {
   return lines.flatMap((line) => {
-    if (!line.sku || line.quantity < 1 || line.unitPrice < 0) {
+    if (!line.sku || line.quantity <= 0 || line.unitPrice < 0) {
       return [`Invalid order line: ${line.sku || "unknown"}`];
     }
     return [];
