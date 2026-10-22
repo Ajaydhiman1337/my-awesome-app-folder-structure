@@ -32,3 +32,7 @@ export function getOrderPreview(customerId: string): string {
 
 export { app, orderService, userService };
 
+export function createUserServiceForWorker(): UserService {
+  return new UserService();
+}
+
