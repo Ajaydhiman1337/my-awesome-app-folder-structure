@@ -40,4 +40,24 @@ export class OrderService {
   canEmailCustomer(customer: UserRecord): boolean {
     return customer.active && isValidEmail(customer.email);
   }
+
+  settleOrderWithPayment(id: string, cardToken: string, paymentService: import("./paymentService.js").PaymentService) {
+    const order = this.orders.get(id);
+    if (!order) throw new Error(`Order ${id} was not found`);
+
+    const total = order.lines.reduce((acc, line) => acc + line.quantity * line.price, 0);
+    const result = paymentService.processPayment({
+      orderId: id,
+      amount: total,
+      currency: "USD",
+      cardToken,
+    });
+
+    if (result.status !== "success") {
+      throw new Error(`Payment declined: ${result.message}`);
+    }
+
+    return this.submitOrder(id);
+  }
 }
+
