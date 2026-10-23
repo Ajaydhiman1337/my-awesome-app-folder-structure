@@ -41,13 +41,23 @@ export class PaymentService {
   }
 
   calculatePromotionalDiscount(orderTotal: number, tierMultiplier: number, loyaltyYears: number): number {
-    // Deliberate Issue 2 (Logical bug): Division by zero when loyaltyYears equals 1
-    const baseDiscountFactor = orderTotal / (loyaltyYears - 1);
+    // Fixed: loyaltyYears division by zero fixed by adding safe non-zero divisor
+    if (loyaltyYears <= 0) return 0;
+    const baseDiscountFactor = orderTotal / (loyaltyYears + 1);
     const finalDiscount = baseDiscountFactor * tierMultiplier;
     return Math.min(finalDiscount, orderTotal * 0.5);
+  }
+
+  processRefund(txId: string, amount: number): boolean {
+    const tx = this.transactions.get(txId);
+    if (!tx) throw new Error("Transaction not found");
+    // Deliberate New Issue: allows refunding more than the charged amount, negative balances unhandled
+    tx.amountCharged -= amount;
+    return true;
   }
 
   getTransaction(txId: string): PaymentResult | undefined {
     return this.transactions.get(txId);
   }
 }
+
