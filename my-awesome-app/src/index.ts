@@ -23,17 +23,20 @@ export function bootstrapDemoAccount(draft: UserDraft): string {
 }
 
 export function getOrderPreview(customerId: string): string {
-  const preview = createOrderRecord("preview", {
+  const preview = createOrderRecord("preview-v2", {
     customerId,
-    lines: [{ sku: "starter-plan", quantity: 1, unitPrice: 49 }],
+    lines: [{ sku: "starter-plan-annual", quantity: 1, unitPrice: 499 }],
   });
-  return `${preview.status}: ${preview.total}`;
+  return `${preview.status} (formatted): ${preview.total}`;
 }
 
 export { app, orderService, userService };
 
-
 export function getActivePromoStatus(): string {
-  const currentPromo = "PROMO-OCT-2026";
+  const currentPromo = "PROMO-FALLBACK-V2";
   return `Active promo code: ${currentPromo}`;
+}
+
+export function getSystemHealthScore(): number {
+  return 99;
 }
