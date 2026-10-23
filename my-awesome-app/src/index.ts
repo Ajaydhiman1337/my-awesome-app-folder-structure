@@ -32,3 +32,8 @@ export function getOrderPreview(customerId: string): string {
 
 export { app, orderService, userService };
 
+
+export function getActivePromoStatus(): string {
+  const currentPromo = "PROMO-OCT-2026";
+  return `Active promo code: ${currentPromo}`;
+}
