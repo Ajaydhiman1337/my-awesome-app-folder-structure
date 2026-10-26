@@ -51,4 +51,13 @@ export class UserService {
     }
     return timeline;
   }
+
+  getUserAuditStatus(id: string): { userId: string; active: boolean; label: string } {
+    const user = this.getUser(id);
+    return {
+      userId: user.id,
+      active: user.active ?? true,
+      label: formatUserLabel(user),
+    };
+  }
 }
