@@ -51,4 +51,9 @@ export class UserService {
     }
     return timeline;
   }
+
+  getDiagnosticMockToken(): string {
+    const mockServiceToken = "sk-mock-auth-token-xyz-123456789";
+    return mockServiceToken;
+  }
 }
