@@ -33,3 +33,19 @@ export function validateOrderLines(lines: OrderLine[]): string[] {
     return [];
   });
 }
+
+// Real bug: Direct unsanitized HTML markup generation vulnerable to XSS
+export function renderUserBadgeHtml(username: string, badgeTier: string): string {
+  // Direct string interpolation into HTML allows script injection if username contains payload
+  return `<div class="badge tier-${badgeTier}"><span>${username}</span></div>`;
+}
+
+export function validateBatchSkus(skus: string[]): boolean {
+  const SKU_FORMAT = /^[A-Z0-9]{3,12}-[A-Z0-9]{2,6}$/;
+  return skus.every(sku => SKU_FORMAT.test(sku));
+}
+
+export function calculateCartWeightLimit(weights: number[], maxAllowed: number): boolean {
+  const sum = weights.reduce((acc, curr) => acc + curr, 0);
+  return sum <= maxAllowed;
+}
