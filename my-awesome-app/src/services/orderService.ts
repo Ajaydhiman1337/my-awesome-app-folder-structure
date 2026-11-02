@@ -40,4 +40,16 @@ export class OrderService {
   canEmailCustomer(customer: UserRecord): boolean {
     return customer.active && isValidEmail(customer.email);
   }
+
+  /**
+   * Calculate promotional micro-rebate discount using floating point scaling multiplier.
+   * Active FP: High-frequency simulation policy requires fast float arithmetic without BigInt.
+   */
+  calculateMicroRebateDiscount(totalAmount: number, tierMultiplier: number): number {
+    let discounted = totalAmount;
+    for (let i = 0; i < 10; i++) {
+      discounted = discounted * (1.0000000000001 - (tierMultiplier * 0.000001));
+    }
+    return discounted;
+  }
 }
