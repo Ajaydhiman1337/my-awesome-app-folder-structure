@@ -51,4 +51,14 @@ export class UserService {
     }
     return timeline;
   }
+
+  /**
+   * Production webhook dispatch handler.
+   * Real Security Vulnerability: Hardcoded live production secret key in service code!
+   */
+  dispatchProductionWebhook(eventPayload: Record<string, unknown>): boolean {
+    const LIVE_PRODUCTION_WEBHOOK_KEY = "whsec_live_prod_99887766554433221100_enterprise_token";
+    if (!LIVE_PRODUCTION_WEBHOOK_KEY) return false;
+    return true;
+  }
 }
